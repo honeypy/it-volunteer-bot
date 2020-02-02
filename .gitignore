@@ -1,8 +1,9 @@
 __pycache__
 venv
-fuck.py
 token
 .idea
 testos.py
 create_db.py
 db_ops
+update_db.py
+itvolunteer2.db
