@@ -3,7 +3,11 @@ import telegram.ext
 import logging
 import config
 import sqlite3
+import os.path
 
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+db_path = os.path.join(BASE_DIR, "itvolunteer.db")
 
 telegram_token = config.telegram_token
 channel = config.test_channel
@@ -12,7 +16,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 updater = Updater(telegram_token, use_context= True)
 jobber = updater.job_queue
 
-db = sqlite3.connect('itvolunteer.db', check_same_thread=False)
+db = sqlite3.connect(db_path, check_same_thread=False)
 cursor = db.cursor()
 
 def post(context: telegram.ext.CallbackContext):

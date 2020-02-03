@@ -1,6 +1,11 @@
 from bs4 import BeautifulSoup
 import requests
 import sqlite3
+import os.path
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+db_path = os.path.join(BASE_DIR, "itvolunteer.db")
+
 
 def scrape_news(soup_news):
     for soup in soup_news:
@@ -32,7 +37,7 @@ def scrape(raw_tasks):
         db.commit()
 
 
-db = sqlite3.connect('itvolunteer.db', check_same_thread=False)
+db = sqlite3.connect(db_path, check_same_thread=False)
 cursor = db.cursor()
 
 # getting soup of posts
