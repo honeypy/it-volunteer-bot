@@ -32,7 +32,7 @@ def scrape(raw_tasks):
         db.commit()
 
 
-db = sqlite3.connect('itvolunteer.db')
+db = sqlite3.connect('itvolunteer.db', check_same_thread=False)
 cursor = db.cursor()
 
 # getting soup of posts
