@@ -54,8 +54,8 @@ def make_text(task):
 def start(bot, update):
     bot.sendMessage(text='Бот запущен.', chat_id=update.message.chat.id)
 
-    start_handler = CommandHandler('start', start)
-    dispatcher.add_handler(start_handler)
+start_handler = CommandHandler('start', start)
+dispatcher.add_handler(start_handler)
 
 
 job_post = jobber.run_repeating(post, interval=60, first=0)
