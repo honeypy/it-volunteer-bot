@@ -1,4 +1,4 @@
-from telegram.ext import Updater, Job
+from telegram.ext import Updater, CommandHandler
 import telegram.ext
 import logging
 import config
@@ -14,13 +14,13 @@ channel = config.test_channel
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 updater = Updater(telegram_token, use_context= True)
+dispatcher = updater.dispatcher
 jobber = updater.job_queue
 
 db = sqlite3.connect(db_path, check_same_thread=False)
 cursor = db.cursor()
 
 def post(context: telegram.ext.CallbackContext):
-    print('try to post')
     cursor.execute('SELECT * FROM tasks WHERE published=0')
     tasks_to_post = cursor.fetchall()
     for task in tasks_to_post:
@@ -50,12 +50,20 @@ def make_text(task):
     text = title_text+title+tags_text+tags+reward_text+reward+more_text+more
     return text
 
+def start(bot, update):
+    bot.sendMessage(text='Бот запущен.', chat_id=update.message.chat.id)
+
+    start_handler = CommandHandler('start', start)
+    dispatcher.add_handler(start_handler)
+
+
 job_post = jobber.run_repeating(post, interval=60, first=0)
+
 
 
 if __name__ == '__main__':
     updater.start_polling()
     print('go')
-    updater.idle()
+    #updater.idle()
     # updater.start_webhook(listen='127.0.0.1', port=5001, url_path=telegram_token)
     # updater.bot.setWebhook(webhook_url='https://95.85.37.72/' + telegram_token, certificate=open('cert.pem', 'rb'))

@@ -24,9 +24,9 @@ def scrape(raw_tasks):
             tags = []
             raw_tags = task.find('div', class_='task-tags').find_all('a')
             for tag in raw_tags:
-                text_tag = tag.text
+                text_tag = tag.text.lower()
                 tags.append(text_tag)
-            tags = ','.join(tags)
+            tags = ', '.join(tags)
             reward = task.find('span', class_='reward-name').text.strip()
             link = task.find('a', class_='ga-event-trigger').attrs['href'].strip()
         cursor.execute("SELECT rowid FROM tasks WHERE title = ?", (title,))
