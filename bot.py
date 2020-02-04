@@ -39,14 +39,15 @@ def post(context: telegram.ext.CallbackContext):
 
 
 def make_text(task):
-    title_text ='<b>'+ "\U0001F449Новое задание: " + '</b>'
+    title_text ='<b>'+ "\U0001F449 Новое задание: " + '</b>'
     title = task[1]+'\n'
-    tags_text = '<b>'+ "\U00002B50Теги: " + '</b>'
+    tags_text = '<b>'+ "\U00002B50 Теги: " + '</b>'
     tags = task[2]+'\n'
-    reward_text = '<b>'+ "\U0001F576Вознаграждение: " + '</b>'
+    reward_text = '<b>'+ "\U0001F576 Вознаграждение: " + '</b>'
     reward = task[3]+'\n'
-    more_text = '<b>'+ "\U0001F4C4Подробности: " + '</b>'
-    more = task[4]+'\n\n'
+    more_text = '<b>'+ "\U0001F4C4 Подробности: " + '</b>'
+    url_more = task[4].replace('https://', '')
+    more = url_more + '\n\n'
     text = title_text+title+tags_text+tags+reward_text+reward+more_text+more
     return text
 
