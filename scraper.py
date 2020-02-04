@@ -20,14 +20,16 @@ def scrape(raw_tasks):
     raw_tasks.reverse()
     for task in raw_tasks:
         if task.find('h2') == None:
-            title = task.find('h4').text.strip()
+            title_raw = task.find('h4').text.strip()
+            title = title_raw[0].lower() + title_raw[1:]
             tags = []
             raw_tags = task.find('div', class_='task-tags').find_all('a')
             for tag in raw_tags:
                 text_tag = tag.text.lower()
                 tags.append(text_tag)
             tags = ', '.join(tags)
-            reward = task.find('span', class_='reward-name').text.strip()
+            raw_reward = task.find('span', class_='reward-name').text.strip()
+            reward = raw_reward[0].lower() + raw_reward[1:]
             link = task.find('a', class_='ga-event-trigger').attrs['href'].strip()
         cursor.execute("SELECT rowid FROM tasks WHERE title = ?", (title,))
         data = cursor.fetchone()

@@ -25,7 +25,7 @@ def post(context: telegram.ext.CallbackContext):
     tasks_to_post = cursor.fetchall()
     for task in tasks_to_post:
         text = make_text(task)
-        context.bot.sendMessage(chat_id=channel, text=text, parse_mode='HTML')
+        context.bot.sendMessage(chat_id=channel, text=text, parse_mode='HTML', disable_web_page_preview=True)
         cursor.execute('UPDATE tasks SET published=(1) WHERE (link)=(?)', (task[-2],))
         db.commit()
 
@@ -33,7 +33,7 @@ def post(context: telegram.ext.CallbackContext):
     news_to_post = cursor.fetchall()
     for n in news_to_post:
         link = n[1]
-        context.bot.sendMessage(chat_id=channel, text=link, parse_mode='HTML')
+        context.bot.sendMessage(chat_id=channel, text=link, parse_mode='HTML', disable_web_page_preview=True)
         cursor.execute('UPDATE news SET published=(1) WHERE (link)=(?)', (link,))
         db.commit()
 
@@ -51,8 +51,8 @@ def make_text(task):
     text = title_text+title+tags_text+tags+reward_text+reward+more_text+more
     return text
 
-def start(bot, update):
-    bot.sendMessage(text='Бот запущен.', chat_id=update.message.chat.id)
+def start(update, context):
+    context.bot.sendMessage(text='Бот запущен.', chat_id=update.message.chat.id)
 
 start_handler = CommandHandler('start', start)
 dispatcher.add_handler(start_handler)
