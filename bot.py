@@ -33,7 +33,7 @@ def post(context: telegram.ext.CallbackContext):
     news_to_post = cursor.fetchall()
     for n in news_to_post:
         link = n[1]
-        context.bot.sendMessage(chat_id=channel, text=link, parse_mode='HTML', disable_web_page_preview=True)
+        context.bot.sendMessage(chat_id=channel, text=link, parse_mode='HTML')
         cursor.execute('UPDATE news SET published=(1) WHERE (link)=(?)', (link,))
         db.commit()
 
