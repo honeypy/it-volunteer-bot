@@ -32,7 +32,7 @@ def post(context: telegram.ext.CallbackContext):
     cursor.execute('SELECT * FROM news WHERE published=0')
     news_to_post = cursor.fetchall()
     for n in news_to_post:
-        link = n[1]
+        link = n[1].replace('https://', '')
         context.bot.sendMessage(chat_id=channel, text=link, parse_mode='HTML')
         cursor.execute('UPDATE news SET published=(1) WHERE (link)=(?)', (link,))
         db.commit()
@@ -40,14 +40,14 @@ def post(context: telegram.ext.CallbackContext):
 
 def make_text(task):
     title_text ='<b>'+ "\U0001F449 Новое задание: " + '</b>'
-    title = task[1]+'\n'
+    title = task[1]+'.\n'
     tags_text = '<b>'+ "\U00002B50 Теги: " + '</b>'
-    tags = task[2]+'\n'
+    tags = task[2]+'.\n'
     reward_text = '<b>'+ "\U0001F576 Вознаграждение: " + '</b>'
-    reward = task[3]+'\n'
+    reward = task[3]+'.\n'
     more_text = '<b>'+ "\U0001F4C4 Подробности: " + '</b>'
     url_more = task[4].replace('https://', '')
-    more = url_more + '\n\n'
+    more = url_more + '.'
     text = title_text+title+tags_text+tags+reward_text+reward+more_text+more
     return text
 
