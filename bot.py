@@ -17,10 +17,11 @@ updater = Updater(telegram_token, use_context= True)
 dispatcher = updater.dispatcher
 jobber = updater.job_queue
 
-db = sqlite3.connect(db_path, check_same_thread=False)
-cursor = db.cursor()
+
 
 def post(context: telegram.ext.CallbackContext):
+    db = sqlite3.connect(db_path, check_same_thread=False)
+    cursor = db.cursor()
     cursor.execute('SELECT * FROM tasks WHERE published=0')
     tasks_to_post = cursor.fetchall()
     for task in tasks_to_post:
@@ -32,11 +33,13 @@ def post(context: telegram.ext.CallbackContext):
     cursor.execute('SELECT * FROM news WHERE published=0')
     news_to_post = cursor.fetchall()
     for n in news_to_post:
-        link = n[1].replace('https://', '')
-        context.bot.sendMessage(chat_id=channel, text=link, parse_mode='HTML')
+        link = n[1]
+        link_to_post = link.replace('https://', '')
+        text = '#новости' + '\n' + link_to_post
+        context.bot.sendMessage(chat_id=channel, text=text, parse_mode='HTML')
         cursor.execute('UPDATE news SET published=(1) WHERE (link)=(?)', (link,))
         db.commit()
-
+    db.close()
 
 def make_text(task):
     title_text ='<b>'+ "\U0001F449 Новое задание: " + '</b>'
